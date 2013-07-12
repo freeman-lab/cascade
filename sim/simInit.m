@@ -7,8 +7,9 @@ function [d sim] = initSim(simType,simError);
 % 
 
 d.n = 40;
-d.t = 2000;
+d.t = 100;
 d.c = 2;
+d.k = 100;
 
 sim.type = simType;
 sim.error = simError;

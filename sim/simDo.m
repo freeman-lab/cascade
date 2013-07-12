@@ -1,18 +1,17 @@
-%% simulate linear model
-[dsim sim] = simInit('L','loglik');
-[train test] = simData(dsim,sim);
-fit = fitInit(dsim,'L','loglik');
-fit = doFit(train,test,fit);
+% simulate from linear model
+[dsim sim] = simInit('L','mse');
+dsim = simData(dsim,sim);
+% run fit
+fit = fitInit(dsim,'L','mse');
+dsim = prepareStim(dsim,fit);
+[train test] = prepareRoi(dsim,fit,1,0);
+fit = fitDo(train,test,fit);
 
-%% simulate nonlinear-linear model
-[dsim sim] = initSim('NL');
-[train test] = genData(dsim,sim);
-fit = initFit(dsim,train,'NL');
-fit = doFit(train,test,fit);
-
-
-d.stats.mn = nanmean(d.stimUpRaw,2);
-d.stats.std = nanstd(d.stimUpRaw,[],2);
-z = bsxfun(@minus,d.stimUpRaw,d.stats.mn);
-z = bsxfun(@rdivide,z,d.stats.std);
-d.stats.prc = prctile(z,[0.25 99.75],2);
+% simulate from a nonlinear-linear model
+[dsim sim] = simInit('NL','mse');
+dsim = simData(dsim,sim);
+% run fit
+fit = fitInit(dsim,'NL','mse');
+dsim = prepareStim(dsim,fit);
+[train test] = prepareRoi(dsim,fit,1,0);
+fit = fitDo(train,test,fit);

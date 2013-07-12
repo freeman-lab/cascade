@@ -1,41 +1,30 @@
-function [train test] = simData(d,sim)
+function d = simData(d,sim)
 
 % 
-% [train test] = simData(d,sim)
+% d = simData(d,sim)
 % 
 % generate simulated data for testing model fits
 % 
 
 switch sim.type
 case 'L'
-	train.S = randn(d.c,d.t)/2;
-	train.S_ct = makeStimRows(train.S',d.n)';
-	test.S = randn(d.c,d.t)/2;
-	test.S_ct = makeStimRows(test.S',d.n)';
-
-	train.R_t = evalNonLin(sim.B_q'*train.S_ct,sim.g);
-	test.R_t = evalNonLin(sim.B_q'*train.S_ct,sim.g);
+	d.S = randn(d.c,d.t*d.k)/2;
+	d.S_ct = makeStimRows(d.S',d.n)';
+	d.R_t = evalNonLin(sim.B_q'*d.S_ct,sim.g);
 
 case 'NL'
-	train.S = randn(d.c,d.t)/2;
-	train.S_ct = makeStimRows(train.S',d.n)';
-	test.S = randn(d.c,d.t)/2;
-	test.S_ct = makeStimRows(test.S',d.n)';
-
-	train.R_t = evalNonLin(sim.B_q'*evalNonLin(train.S_ct,sim.f),sim.g);
-	test.R_t = evalNonLin(sim.B_q'*evalNonLin(test.S_ct,sim.f),sim.g);
+	d.S = randn(d.c,d.t*d.k)/2;
+	d.S_ct = makeStimRows(d.S',d.n)';
+	d.R_t = evalNonLin(sim.B_q'*evalNonLin(d.S_ct,sim.f),sim.g);
 end
 
 noise = 0.5;
 switch sim.error
 case 'mse'
-	train.R_t = train.R_t + randn(size(train.R_t))*noise;
-	test.R_t = test.R_t + randn(size(test.R_t))*noise;
+	d.R_t = d.R_t + randn(size(d.R_t))*noise;
 case 'loglik'
-	train.R_t = poissrnd(train.R_t);
-	test.R_t = poissrnd(test.R_t);
+	d.R_t = poissrnd(d.R_t);
 end
 
-train.roiId = 1;
-test.roiId = 1;
-
+d.S_ctk = reshape(d.S_ct,d.c,d.t,d.k);
+d.R_ntk = reshape(d.R_t,1,d.t,d.k);
