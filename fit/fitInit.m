@@ -10,6 +10,7 @@ function fit = initFit(d,fitType,fitError)
 fit.error = fitError;
 fit.displayMode = 'off';
 fit.cv.cvn = 5;
+fit.cv = cvpartition(d.k,'kfold',fit.cv.cvn);
 fit.n = 14;
 fit.type = fitType;
 fit.stats = d.stats;

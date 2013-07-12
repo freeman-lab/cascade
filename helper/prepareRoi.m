@@ -1,9 +1,14 @@
-function [train test] = getRoi(d,fit,iroi,icv)
+function [train test] = getRoi(d,fit,iroi,icv,bootsmp)
 
 %
-% [train test] = getRoi(d,iroi)
+% [train test] = getRoi(d,fit,iroi,icv,resamp)
 %
 % load train and testing stim and response
+% for cross-validation:
+% 	set 'icv' to the fold of cross-validation we want
+%	train/test indices must be in fit.cv
+% for bootstrapping:
+%	set 'bootsmp' to 1 
 %
 
 % do cross validation splitting
@@ -11,9 +16,17 @@ if ~exist('icv','var') || icv == 0
 	trainInds = [1:d.k]';
 	testInds = 1;
 else
-	trainInds = find(d.cv.training(icv));
-	testInds = find(d.cv.test(icv));
+	trainInds = find(fit.cv.training(icv));
+	testInds = find(fit.cv.test(icv));
 end
+
+% resample trials with replacement
+if exist('bootsmp','var') && bootsmp == 1
+	bootInds = ceil(rand(1,length(trainInds))*length(trainInds));
+	trainInds = trainInds(bootInds);
+end
+
+% add an option for randomization...
 
 train.trainInds = trainInds;
 test.testInds = testInds;

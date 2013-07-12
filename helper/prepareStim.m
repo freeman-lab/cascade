@@ -9,9 +9,6 @@ switch fit.type
 			case 'same'
 				data.S_ct = makeConvTrialMat(data.S_ct,data.k,fit);		
 				data.S_ctk = reshape(data.S_ct,fit.c*fit.n,fit.t,data.k);
-			case 'up'
-				data.S_ct = downSampTrialMat(data.S_ct,data.k,fit)
-				data.S_ct = makeConvTrialMat(data.S_ct,data.k,fit);	
 		end
 	case 'NL'
 		switch fit.samp
@@ -62,8 +59,6 @@ switch fit.type
 				data.S_ctk_f = reshape(data.S_ct_f,fit.c*fit.n,fit.t,data.k,fit.m);
 		end
 end
-
-data.cv = cvpartition(data.k,'kfold',fit.cv.cvn);
 
 function S_ct = downSampTrialMat(S_ct,k,fit)
 
