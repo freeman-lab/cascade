@@ -1,4 +1,4 @@
-Encoding
+Cascade
 =======
 
 Library for fitting neural encoding models
