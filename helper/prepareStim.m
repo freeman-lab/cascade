@@ -9,6 +9,10 @@ switch fit.type
 			case 'same'
 				data.S_ct = makeConvTrialMat(data.S_ct,data.k,fit);		
 				data.S_ctk = reshape(data.S_ct,fit.c*fit.n,fit.t,data.k);
+			case 'up'
+				data.S_ct = downSampTrialMat(data.S_ct,data.k,fit);
+				data.S_ct = makeConvTrialMat(data.S_ct,data.k,fit);		
+				data.S_ctk = reshape(data.S_ct,fit.c*fit.n,fit.t,data.k);
 		end
 	case 'NL'
 		switch fit.samp
