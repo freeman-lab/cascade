@@ -20,7 +20,7 @@ fit.t = d.t;
 fit.c = d.c;
 fit.samp = d.samp;
 fit.rnd.n = d.rnd.n;
-fit.boot.n = 10;
+fit.boot.n = 50;
 
 switch fitType
 
