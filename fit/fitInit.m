@@ -1,7 +1,7 @@
-function fit = initFit(d,fitType,fitError)
+function fit = fitInit(d,fitType,fitError)
 
 %
-% fit = initFit(d,fitType)
+% fit = fitInit(d,fitType,fitError)
 %
 % initialize a fit structure with options
 % 
@@ -9,8 +9,8 @@ function fit = initFit(d,fitType,fitError)
 % set top-level fit parameters
 fit.error = fitError;
 fit.displayMode = 'off';
-fit.cv.cvn = 5;
-fit.cv = cvpartition(d.k,'kfold',fit.cv.cvn);
+fit.cv.n = 5;
+fit.cv.obj = cvpartition(d.k,'kfold',fit.cv.n);
 fit.n = 14;
 fit.type = fitType;
 fit.stats = d.stats;
@@ -19,7 +19,8 @@ fit.u = d.u;
 fit.t = d.t;
 fit.c = d.c;
 fit.samp = d.samp;
-
+fit.rnd.n = d.rnd.n;
+fit.boot.n = 10;
 
 switch fitType
 
