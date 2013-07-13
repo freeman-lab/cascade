@@ -37,7 +37,7 @@ if isfield(fit,'f')
 		tmp(1,1,:) = fit.f(ic).w;
 		S_ct(prng,:) = sum(bsxfun(@times,data.S_ct_f(prng,:,:),tmp),3);
 	end
-	if ~ieNotDefined('normFactor')
+	if exist('normFactor','var')
 		S_ct = bsxfun(@rdivide,S_ct,normFactor);
 	end
 else
@@ -49,7 +49,7 @@ R_t = data.R_t;
 fun = @(prs) fitB_err(prs(:),S_ct,R_t,fit);
 
 % check deriviatives and hessians
-if ~ieNotDefined('testMode') && testMode
+if exist('testMode','var') && testMode
 	[a b] = checkDeriv_Elts(fun,x0);
 	[a b] = checkHess_Elts(fun,x0);
 	return

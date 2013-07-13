@@ -32,7 +32,7 @@ end
 fun = @(prs) fitF_err(prs,Y_ct,R_t,fit);
 
 % check deriviatives and hessians
-if ~ieNotDefined('testMode') && testMode == 1
+if exist('testMode','var') && testMode == 1
     [a b] = checkDeriv_Elts(fun,x0);
     [a b] = checkHess_Elts(fun,x0);
     return

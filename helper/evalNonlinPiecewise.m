@@ -19,7 +19,7 @@ if length(nlParams) > 1
 	out = zeros(size(X));
 	outRaw = zeros([size(X,1) size(X,2) nlParams(1).m]);
 	for inl=1:length(nlParams)
-		if ieNotDefined('solo') || solo == 0
+		if ~exist('solo','var') || solo == 0
       prng = nlParams(inl).prng;
     else
     	prng = inl;

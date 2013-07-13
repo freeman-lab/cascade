@@ -19,7 +19,7 @@ case 'NL'
 		tmp(1,1,:) = fit.f(ic).w;
 		in(prng,:) = sum(bsxfun(@times,data.S_ct_f(prng,:,:),tmp),3);
 	end
-	if ~ieNotDefined('normFactor')
+	if exist('normFactor','var')
 		in = bsxfun(@rdivide,in,normFactor);
 	end
 	Z_t = evalNonLin(fit.B_q'*in, fit.g);
