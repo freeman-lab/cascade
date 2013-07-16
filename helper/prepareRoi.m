@@ -15,7 +15,7 @@ function [train test] = prepareRoi(d,fit,iroi,icv,bootsmp,rndsmp)
 % check how many trials have NaNs or 0s
 R_tk = squeeze(d.R_ntk(iroi,:,:));
 badTrials = (sum(isnan(R_tk)) == d.t);
-if sum(~badTrials) < 50
+if sum(~badTrials) < 2
 	train = [];
 	test = [];
 	fprintf('(getRoi) fewer than 50 trials without NaNs, skipping roi\n');
