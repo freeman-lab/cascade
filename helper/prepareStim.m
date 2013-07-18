@@ -35,6 +35,7 @@ switch fit.type
 			case 'up'
 				% APPLY NONLINEARITY THEN DOWNSAMPLE
 				% generate nonlin transformed version
+				
 				[~,data.S_ct_f] = evalNonlinPiecewise(data.S_ct,fit.f,1);
 				% downsample
 				downsampOut = zeros(fit.c,fit.t*data.k,fit.f(1).m);
@@ -101,7 +102,12 @@ S_ctk = reshape(S_ct,c,t,k);
 S_ctk_v = zeros(c*n,t,k);
 warning('off')
 for ik=1:k
-	S_ctk_v(:,:,ik) = makeStimRows(S_ctk(:,:,ik)',n)';
+	tmp = [];
+	for ic=1:fit.c
+		thisstim = makeStimRows(S_ctk(ic,:,ik)',n,0,S_ctk(ic,1,ik))';
+		tmp = [tmp; thisstim];
+	end
+	S_ctk_v(:,:,ik) = tmp;
 end
 warning('on')
 S_ct = reshape(S_ctk_v,c*n,t*k);
