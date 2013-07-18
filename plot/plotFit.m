@@ -10,7 +10,7 @@ set(gcf,'Position',[400 0 650 700]);
 subplot(3,2,1);
 set(gca,'FontSize',16);
 filts = reshape(fit.B_q,fit.n,fit.c);
-if isfield(fit,'boot')
+if isfield(fit.boot,'out')
 	filtslow = prctile([fit.boot.out(:).B_q],16,2);
 	filtshigh = prctile([fit.boot.out(:).B_q],84,2);
 	filtsmed = prctile([fit.boot.out(:).B_q],50,2);
@@ -20,7 +20,7 @@ if isfield(fit,'boot')
 end
 for ic=1:fit.c
 	hold on
-	if isfield(fit,'boot')
+	if isfield(fit.boot,'out')
 		plot(linspace(fit.n/7,0,fit.n),filtsmed(:,ic),'Color',clrs{ic},'LineWidth',3);
 		plot(linspace(fit.n/7,0,fit.n),filtslow(:,ic),'Color',clrs{ic},'LineWidth',1);
 		plot(linspace(fit.n/7,0,fit.n),filtshigh(:,ic),'Color',clrs{ic},'LineWidth',1);
@@ -59,7 +59,7 @@ case 'NL'
 		xtrans = x*fit.stats.std(ic) + fit.stats.mn(ic);
 		y = evalNonlinPiecewise(x,fit.f(ic));
 		hold on
-		if isfield(fit,'boot')
+		if isfield(fit.boot,'out')
 			fboot = [fit.boot.out(:).f];
 			errlow = prctile(fboot((ic-1)*fit.m+1:ic*fit.m,:),16,2);
 			errhigh = prctile(fboot((ic-1)*fit.m+1:ic*fit.m,:),84,2);
@@ -99,7 +99,7 @@ case 'NL'
 end
 
 
-if isfield(fit,'boot')
+if isfield(fit.boot,'out') && fit.c==2
 	normval = getNorm(reshape(fit.B_q,fit.n,fit.c),'L2',1);
 	rndWeight = reshape([fit.rnd.out(:).B_q],fit.n,fit.c,fit.rnd.n);
 	bootWeight = reshape([fit.boot.out(:).B_q],fit.n,fit.c,fit.rnd.n);
