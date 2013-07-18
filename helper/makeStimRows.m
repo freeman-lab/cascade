@@ -1,4 +1,4 @@
-function S= makeStimRows(Stim, n, flag);
+function S= makeStimRows(Stim, n, flag, zeroVal);
 %  S = makeStimRows(Stim, n, flag);
 %
 %  Converts raw stimulus to a matrix where each row is loaded with the full
@@ -42,10 +42,20 @@ if (n2 > sz(2));       % reshape to matrix if necessary
 end
 
 if flag == 0  % Compute with zero-padding. ----------------------------------
-    S = zeros(sz(1), n2*n);
+    if ~exist('zeroVal','var') | zeroVal == 0
+        S = zeros(sz(1), n2*n);
+    else
+        S = ones(sz(1),n2*n) * zeroVal;
+        
+    end
     for j=1:n2
-        S(:,(n*(j-1)+1):(n*j)) = ...
-            fliplr(toeplitz(Stim(:, j), [Stim(1,j) zeros(1,n-1)]));
+        if ~exist('zeroVal','var') | zeroVal == 0
+            S(:,(n*(j-1)+1):(n*j)) = ...
+                fliplr(toeplitz(Stim(:, j), [Stim(1,j) zeros(1,n-1)]));
+        else
+             S(:,(n*(j-1)+1):(n*j)) = ...
+                fliplr(toeplitz(Stim(:, j), [Stim(1,j) zeroVal*ones(1,n-1)]));
+        end
     end
     
     
