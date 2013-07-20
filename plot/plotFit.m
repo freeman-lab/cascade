@@ -21,7 +21,7 @@ end
 for ic=1:fit.c
 	hold on
 	if isfield(fit.boot,'out')
-		plot(linspace(fit.n/7,0,fit.n),filtsmed(:,ic),'Color',clrs{ic},'LineWidth',3);
+		plot(linspace(fit.n/7,0,fit.n),filts(:,ic),'Color',clrs{ic},'LineWidth',3);
 		plot(linspace(fit.n/7,0,fit.n),filtslow(:,ic),'Color',clrs{ic},'LineWidth',1);
 		plot(linspace(fit.n/7,0,fit.n),filtshigh(:,ic),'Color',clrs{ic},'LineWidth',1);
 	else
@@ -112,6 +112,7 @@ if isfield(fit.boot,'out') && fit.c==2
 		rndFrac = rndNorm(1,:)./(rndNorm(1,:)+rndNorm(2,:));
 		bootFrac = bootNorm(1,:)./(bootNorm(1,:)+bootNorm(2,:));
 	end
+	pval = sum(rndFrac>frac(1))/fit.rnd.n;
 	bins = linspace(0,1,20);
 	h1 = hist(rndFrac,bins);
 	h2 = hist(bootFrac,bins);
@@ -125,4 +126,5 @@ if isfield(fit.boot,'out') && fit.c==2
 	set(gca,'TickDir','out');
 	xlabel('Touch / (Touch + Whisk)')
 	ylabel('Fraction of distribution')
+	title(sprintf('p-value = %g',pval));
 end
