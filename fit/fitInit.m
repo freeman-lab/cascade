@@ -1,4 +1,4 @@
-function fit = fitInit(d,fitType,fitError)
+function fit = fitInit(d,fitType,fitError,n)
 
 %
 % fit = fitInit(d,fitType,fitError)
@@ -11,7 +11,7 @@ fit.error = fitError;
 fit.displayMode = 'off';
 fit.cv.n = 5;
 fit.cv.obj = cvpartition(d.k,'kfold',fit.cv.n);
-fit.n = 14;
+fit.n = n;
 fit.type = fitType;
 fit.stats = d.stats;
 fit.stims = d.stims;
