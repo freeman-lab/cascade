@@ -1,7 +1,7 @@
 function plotFit(fit,clrs,labels)
 
 clf
-set(gcf,'Position',[400 0 650 700]);
+set(gcf,'Position',[400 0 840 1050]);
 %clrs{1} = [0 0 1];
 %clrs{2} = [0 0 0.5];
 %clrs{2} = [1 0 0];
@@ -36,6 +36,7 @@ drawHorzLine(0);
 ylabel('Change in dF/F');
 xlabel('Time before response');
 title(sprintf('Derived kernels, ROI: %g',fit.roiId));
+ylim([min(-0.01,min(filts(:))+0.01*min(filts(:))) max(filts(:))+0.01*max(filts(:))]);
 subplot(3,2,2);
 set(gca,'FontSize',16);
 plotNonLin(fit.g);
