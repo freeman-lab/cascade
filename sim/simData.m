@@ -26,5 +26,5 @@ case 'loglik'
 	d.R_t = poissrnd(d.R_t);
 end
 
-d.S_ctk = reshape(d.S_ct,d.c,d.t,d.k);
+d.S_ctk = reshape(d.S_ct,d.c*d.n,d.t,d.k);
 d.R_ntk = reshape(d.R_t,1,d.t,d.k);

@@ -3,7 +3,7 @@ function r = getR(predic,resp)
 %
 % r = getR(predic,resp)
 %
-% quick function for getting r2 with a given
+% quick function for getting r with a given
 % predictor and response
 % 
 
