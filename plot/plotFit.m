@@ -21,7 +21,7 @@ end
 for ic=1:fit.c
 	hold on
 	if isfield(fit.boot,'out')
-		plot(linspace(fit.n/7,0,fit.n),filts(:,ic),'Color',clrs{ic},'LineWidth',3);
+		plot(linspace(fit.n/7,0,fit.n),filtsmed(:,ic),'Color',clrs{ic},'LineWidth',3);
 		plot(linspace(fit.n/7,0,fit.n),filtslow(:,ic),'Color',clrs{ic},'LineWidth',1);
 		plot(linspace(fit.n/7,0,fit.n),filtshigh(:,ic),'Color',clrs{ic},'LineWidth',1);
 	else
@@ -52,6 +52,9 @@ case 'L'
 	title(sprintf('r train: %.2g, r test: %.2g',fit.train.r,fit.test.r));
 	legend({'Response','Fit'})
 case 'NL'
+	scalefac = getNorm(filts,'L2',1);
+	scalefac = scalefac / sum(scalefac);
+	scalefac = scalefac/max(scalefac);
 
 	for ic=1:fit.c
 		sanesubplot(3,fit.c,{2 ic});
@@ -72,9 +75,9 @@ case 'NL'
 			errhigh = evalNonlinPiecewise(x,tmp);
 			tmp.w = errmid;
 			errmid = evalNonlinPiecewise(x,tmp);
-			plot(xtrans,errlow,'Color',clrs{ic});
-			plot(xtrans,errhigh,'Color',clrs{ic});
-			h = plot(xtrans,errmid);
+			plot(xtrans,errlow*scalefac(ic),'Color',clrs{ic});
+			plot(xtrans,errhigh*scalefac(ic),'Color',clrs{ic});
+			h = plot(xtrans,errmid*scalefac(ic));
 			set(h,'LineWidth',3,'Color',clrs{ic});
 		else
 			h = plot(xtrans,y);
