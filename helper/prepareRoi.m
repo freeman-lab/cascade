@@ -11,7 +11,6 @@ function [train test] = prepareRoi(d,fit,iroi,icv,bootsmp,rndsmp)
 %	set 'bootsmp' to 1 
 %
 
-
 % check how many trials have NaNs or 0s
 R_tk = squeeze(d.R_ntk(iroi,:,:));
 badTrials = (sum(isnan(R_tk)) == d.t);
@@ -23,12 +22,19 @@ if sum(~badTrials) < 50
 end
 
 % do cross validation splitting
-if ~exist('icv','var') || icv == 0
+if ~exist('icv','var') || sum(icv == 0)
 	trainInds = [1:d.k]';
 	testInds = 1;
-else
+elseif length(icv) == 1 % k-fold
 	trainInds = find(fit.cv.obj.training(icv));
 	testInds = find(fit.cv.obj.test(icv));
+elseif length(icv) == 2 % leave one out
+	trainInds = ones(1,d.k);
+	testInds = zeros(1,d.k);
+	trainInds(icv(2)) = 0;
+	testInds(icv(2)) = 1;
+	trainInds = find(trainInds);
+	testInds = find(testInds);
 end
 
 % resample trials with replacement
