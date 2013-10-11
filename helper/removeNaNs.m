@@ -10,6 +10,9 @@ function data = removeNaNs(data,fit)
 		R_tk = reshape(data.R_t,fit.t,data.k);
 		S_ctk = reshape(data.S_ct,fit.c*fit.n,fit.t,data.k);
 		badTrials = (sum(isnan(R_tk)) == fit.t);
+		if strcmp(fit.error,'loglik')
+			badTrials = badTrials | sum(R_tk) == 0;
+		end
 		data.k = sum(~badTrials);
 		data.S_ct = reshape(S_ctk(:,:,~badTrials),fit.c*fit.n,fit.t*data.k);
 		data.R_t = reshape(R_tk(:,~badTrials),1,fit.t*data.k);
@@ -19,12 +22,16 @@ function data = removeNaNs(data,fit)
 		data.S_ct = data.S_ct(:,~badInds);
 		data.R_t = data.R_t(~badInds);
 
+
 	case 'NL'
 
 		% reshape and remove trials that are all nans
 		R_tk = reshape(data.R_t,fit.t,data.k);
 		S_ctk_f = reshape(data.S_ct_f,fit.c*fit.n,fit.t,data.k,fit.m);
 		badTrials = (sum(isnan(R_tk)) == fit.t);
+		if strcmp(fit.error,'loglik')
+			badTrials = badTrials | sum(R_tk) == 0;
+		end
 		data.k = sum(~badTrials);
 		data.S_ct_f = reshape(S_ctk_f(:,:,~badTrials,:),fit.c*fit.n,fit.t*data.k,fit.m);
 		data.R_t = reshape(R_tk(:,~badTrials),1,fit.t*data.k);
