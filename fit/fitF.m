@@ -39,7 +39,12 @@ if exist('testMode','var') && testMode == 1
 end
 
 % do the optimization
-opts = optimset('Display',fit.displayMode,'GradObj','on','Hessian','on','MaxFunEvals',20000);
+if strcmp(fit.error,'mse')
+    estParams = inv(Y_ct*Y_ct' + fit.pr.F.scale*fit.pr.F.D)*Y_ct*R_t';
+else
+    opts = optimset('Display',fit.displayMode,'GradObj','on','Hessian','on','MaxFunEvals',20000);
+    estParams = fminunc(fun,x0,opts);
+end
 %A = [];
 %b = [];
 %Aeq = [];
@@ -48,7 +53,6 @@ opts = optimset('Display',fit.displayMode,'GradObj','on','Hessian','on','MaxFunE
 %ub = [ones(length(x0)-1,1)*inf; inf];
 %nonlcon = [];
 %estParams = fmincon(fun,x0,A,b,Aeq,Beq,lb,ub,nonlcon,opts);
-estParams = fminunc(fun,x0,opts);
 
 % collect results, and normalize so that
 % the minimum is 0 and the max is 1 (removes degenerecy!)
