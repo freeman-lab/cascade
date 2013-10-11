@@ -46,3 +46,9 @@ case 'loglik'
 	sim.g.p = [0 1];
 
 end
+
+d.stims = 'ab';
+d.u = 1;
+d.samp = 'same';
+d.rnd.n = 0;
+d.boot.n = 0;

@@ -28,3 +28,7 @@ end
 
 d.S_ctk = reshape(d.S_ct,d.c*d.n,d.t,d.k);
 d.R_ntk = reshape(d.R_t,1,d.t,d.k);
+
+d.stats.mn = 0;
+d.stats.std = 1;
+d.stats.prc = [-3 3; -3 3];

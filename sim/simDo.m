@@ -1,9 +1,9 @@
 % simulate from linear model
-[dsim sim] = simInit('L','mse');
+[dsim sim] = simInit('L','loglik');
 dsim = simData(dsim,sim);
 % run fit
-fit = fitInit(dsim,'L','mse');
-dsim = prepareStim(dsim,fit);
+fit = fitInit(dsim,'L','loglik',40);
+%dsim = prepareStim(dsim,fit);
 [train test] = prepareRoi(dsim,fit,1,0);
 fit = fitDo(train,test,fit);
 
