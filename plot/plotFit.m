@@ -25,11 +25,11 @@ for ic=1:fit.c
 		plot(linspace(fit.n/7,0,fit.n),filtslow(:,ic),'Color',clrs{ic},'LineWidth',1);
 		plot(linspace(fit.n/7,0,fit.n),filtshigh(:,ic),'Color',clrs{ic},'LineWidth',1);
 	else
-		plot(linspace(fit.n/7,0,fit.n),filts(:,ic),'Color',clrs{ic},'LineWidth',3);
+		plot(linspace(0.4,-0.2,fit.n),filts(:,ic),'Color',clrs{ic},'LineWidth',3);
 	end
 end
 box off;
-xlim([0 fit.n/7]);
+xlim([-0.2 0.4]);
 set(gca,'XDir','reverse');
 set(gca,'TickDir','out');
 drawHorzLine(0);
