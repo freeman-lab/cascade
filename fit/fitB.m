@@ -20,7 +20,7 @@ end
 if usingSplines
 	x0 = [fit.B_q(:)];
 else
-	x0 = [fit.B_q(:)*2;fit.g.p(:)];
+	x0 = [fit.B_q(:)*2;fit.g.p(1)];
 end
 
 % precompute matrices associated with prior
@@ -51,13 +51,22 @@ fun = @(prs) fitB_err(prs(:),S_ct,R_t,fit);
 % check deriviatives and hessians
 if exist('testMode','var') && testMode
 	[a b] = checkDeriv_Elts(fun,x0);
-	[a b] = checkHess_Elts(fun,x0);
+	checkDerivAndHess(fun,x0);
 	return
 end
 
-% do the optimization
-opts = optimset('Display',fit.displayMode,'GradObj','on','Hessian','on','MaxFunEvals',20000);
-prsEst = fminunc(fun,x0,opts);
+
+if strcmp(fit.error,'mse')
+	S_ct = [S_ct;ones(1,size(S_ct,2))];
+	priorMat = zeros(size(S_ct,1));
+	priorMat(1:size(fit.pr.B.D,1),1:size(fit.pr.B.D,1)) = fit.pr.B.scale*fit.pr.B.D;
+	prsEst = inv(S_ct*S_ct' + priorMat)*S_ct*R_t';
+	prsEst(end) = -prsEst(end);
+else
+	% do the optimization
+	opts = optimset('Display',fit.displayMode,'GradObj','on','Hessian','on','MaxFunEvals',20000);
+	prsEst = fminunc(fun,x0,opts);
+end
 
 % collect results
 fit.B_q = prsEst(1:fit.q);
@@ -153,8 +162,81 @@ case 'mse'
 			else
 				hess = [H_BB, H_Bf; H_Bf' H_ff];
 			end
-
 		end
+
+case 'loglik'
+	if nargout > 1
+		switch fit.g.type
+		case 'exp'
+			grad_B = -((R_t-Z_t)*S_ct'); % weight grad
+			% contribution of prior
+    	if fit.pr.B.sigma
+    		grad_B = grad_B + (fit.pr.B.scale*2*fit.pr.B.D*B_q)';
+    	end
+      if usingSplines
+        grad = [grad_B];
+      else
+        grad_f = -(sum(Z_t-R_t)); % constant grad
+        grad = [grad_B grad_f]; % combined grad
+      end
+
+		otherwise
+			Q_t = dZ_t./Z_t; % common terms
+      grad_B = -(((R_t.*Q_t)-dZ_t)*S_ct'); % weight grad
+      % contribution of prior
+    	if fit.pr.B.sigma
+    		grad_B = grad_B + (fit.pr.B.scale*2*fit.pr.B.D*B_q)';
+    	end
+      if usingSplines
+        grad = [grad_B];
+      else
+        grad_f = -(sum(dZ_t-(R_t.*Q_t))); % constant grad
+        grad = [grad_B grad_f]; % combined grad
+      end
+    end
+  end
+
+  if nargout > 2
+  	switch fit.g.type
+		case 'exp'
+	  	% common terms
+	    S_ct = S_ct;
+	    % weight hess
+	    H_B = -(S_ct*bsxfun(@times,S_ct,-Z_t)');
+	    % contribution of prior
+			if fit.pr.B.sigma
+				H_B = H_B + fit.pr.B.scale*2*fit.pr.B.D;
+			end
+	    % combined hess
+	    if usingSplines
+	      hess = [H_B];
+	    else
+	      % constant hess
+	      H_f = -(sum(-Z_t));
+	      H_f_B = -((Z_t)*S_ct');
+	      hess = [H_B H_f_B'; H_f_B H_f];
+	  	end
+	  otherwise
+	  	% common terms
+	    S_ct = S_ct;
+	    Q_t = (Z_t.*ddZ_t-dZ_t.*dZ_t)./(Z_t.*Z_t);
+	    % weight hess
+	    H_B = -(S_ct*bsxfun(@times,S_ct,(R_t.*Q_t)-ddZ_t)');
+	    % contribution of prior
+			if fit.pr.B.sigma
+				H_B = H_B + fit.pr.B.scale*2*fit.pr.B.D;
+			end
+	    if usingSplines
+	      hess = [H_B];
+	    else
+	      % constant hess
+	      H_f = -(sum((R_t.*Q_t) - ddZ_t));
+	      H_f_B = -((ddZ_t-(R_t.*Q_t))*S_ct');
+	      % combined hess
+	      hess = [H_B H_f_B'; H_f_B H_f];
+	  	end
+		end
+	end
 end	
 
 
