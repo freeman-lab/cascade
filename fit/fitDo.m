@@ -10,7 +10,7 @@ trainOrig = train;
 testOrig = test;
 train = removeNaNs(train,fit);
 test = removeNaNs(test,fit);
-keyboard
+
 switch fit.type
 	case 'L'
 		% just fit B
