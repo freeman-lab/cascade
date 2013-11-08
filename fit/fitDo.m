@@ -10,7 +10,7 @@ trainOrig = train;
 testOrig = test;
 train = removeNaNs(train,fit);
 test = removeNaNs(test,fit);
-
+keyboard
 switch fit.type
 	case 'L'
 		% just fit B
@@ -40,8 +40,8 @@ switch fit.type
 		normFactor = vector(repmat(normFactor,fit.n,1));
 		
 		fit = fitB(train,fit,0,normFactor);
-		fit.train = fitEval(trainOrig,fit,normFactor);
-		fit.test = fitEval(testOrig,fit,normFactor);
+		fit.train = fitEval(train,fit,normFactor);
+		fit.test = fitEval(test,fit,normFactor);
 
 end
 
