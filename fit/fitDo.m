@@ -1,4 +1,4 @@
-function fit = doFit(train,test,fit)
+function fit = fitDo(train,test,fit)
 
 %
 % fit = doFit(train,test,fit)
@@ -18,14 +18,25 @@ switch fit.type
 		fit.train = fitEval(train,fit);
 		fit.test = fitEval(test,fit);
 
+	case 'LN'
+		fit = fitB(train,fit);
+		fit = fitG(train,fit);
+		fit.g = initSpline(fit.g);
+		fit = fitG(train,fit);
+		fit.train = fitEval(train,fit);
+		fit.test = fitEval(test,fit);
+
 	case 'NL'
 		
 		% iterate between fitting nonlinearities and kernels
 		niter = 5;
 		for i=1:niter
+			keyboard
 			fit = fitF(train,fit);
 			fit = fitB(train,fit);
 		end
+
+		keyboard
 
 		S_ct = zeros(size(train.S_ct_f(:,:,1)));
 		for ic=1:fit.c
