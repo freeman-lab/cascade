@@ -105,6 +105,9 @@ for ik=1:k
 	tmp = [];
 	for ic=1:fit.c
 		thisstim = makeStimRows(S_ctk(ic,:,ik)',n,0,S_ctk(ic,1,ik))';
+		if fit.delay
+			thisstim = circshift(thisstim,[0 fit.delay]);
+		end
 		tmp = [tmp; thisstim];
 	end
 	S_ctk_v(:,:,ik) = tmp;
