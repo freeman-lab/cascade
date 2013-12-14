@@ -31,12 +31,9 @@ switch fit.type
 		% iterate between fitting nonlinearities and kernels
 		niter = 5;
 		for i=1:niter
-			keyboard
 			fit = fitF(train,fit);
 			fit = fitB(train,fit);
 		end
-
-		keyboard
 
 		S_ct = zeros(size(train.S_ct_f(:,:,1)));
 		for ic=1:fit.c
