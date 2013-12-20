@@ -42,7 +42,7 @@ switch fitType
 		fit.q = fit.n*fit.c;
 		fit.B_q = ones(fit.q,1)/5;
 		fit.pr.B.L = kron(eye(fit.c),secondDeriv(fit.q/fit.c));
-		fit.pr.B.sigma = 0;
+		fit.pr.B.sigma = 0.01;
 
 	% set params for nonlinear-linear model
 	case 'NL'
