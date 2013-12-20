@@ -113,6 +113,11 @@ switch fit.error
 		Z_t(iiz) = etol;
 		dZ_t(iiz) = 0;
 		ddZ_t(iiz) = 0;
+		mxtol = 10^6;
+		iiz2 = Z_t > mxtol;
+		Z_t(iiz2) = mxtol;
+		dZ_t(iiz2) = 0;
+		ddZ_t(iiz2) = 0;
 		loglik = getLogLikSpk(Z_t,R_t);
 		err = -loglik;
 end
