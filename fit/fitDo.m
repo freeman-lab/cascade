@@ -20,7 +20,7 @@ switch fit.type
 
 	case 'LN'
 		fit = fitB(train,fit);
-		fit = fitG(train,fit);
+		%fit = fitG(train,fit);
 		fit.g = initSpline(fit.g);
 		fit = fitG(train,fit);
 		fit.train = fitEval(train,fit);

@@ -4,7 +4,7 @@ data.S_ct = reshape(data.S_ctk,fit.c,data.k*round(fit.t*fit.u));
 
 switch fit.type
 
-	case 'L'
+	case {'L','LN'}
 		switch fit.samp
 			case 'same'
 				data.S_ct = makeConvTrialMat(data.S_ct,data.k,fit);		

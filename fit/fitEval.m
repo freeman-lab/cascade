@@ -8,7 +8,7 @@ function out = evalFit(data,fit,normFactor)
 %
 
 switch fit.type
-case 'L'
+case {'L','LN'}
 	Z_t = evalNonLin(fit.B_q'*data.S_ct, fit.g);
 	r2 = getR2(Z_t,data.R_t);
 	r = getR(Z_t,data.R_t);

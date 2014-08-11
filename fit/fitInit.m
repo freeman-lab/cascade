@@ -38,7 +38,7 @@ end
 switch fitType
 
 	% set params for linear model
-	case 'L'
+	case {'L','LN'}
 		fit.q = fit.n*fit.c;
 		fit.B_q = ones(fit.q,1)/5;
 		fit.pr.B.L = kron(eye(fit.c),secondDeriv(fit.q/fit.c));
@@ -62,9 +62,9 @@ switch fitType
 			fit.f(ic).w = fit.f(ic).nd' + randn(size(fit.f(ic).nd'));
 		end
 		fit.pr.B.L = kron(eye(fit.c),secondDeriv(fit.q/fit.c));
-		fit.pr.B.sigma = 0.01;
+		fit.pr.B.sigma = 0.1;
 		fit.pr.F.L = kron(eye(fit.c),secondDeriv(fit.m));
-		fit.pr.F.sigma = 0.01;
+		fit.pr.F.sigma = 0.1;
 	
 end
 
