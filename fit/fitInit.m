@@ -13,6 +13,7 @@ fit.cv.n = 5;
 fit.cv.obj = cvpartition(d.k,'kfold',fit.cv.n);
 fit.n = n;
 fit.type = fitType;
+fit.delay = 0;
 if isfield(d,'stims')
 fit.stims = d.stims;
 end
@@ -62,9 +63,9 @@ switch fitType
 			fit.f(ic).w = fit.f(ic).nd' + randn(size(fit.f(ic).nd'));
 		end
 		fit.pr.B.L = kron(eye(fit.c),secondDeriv(fit.q/fit.c));
-		fit.pr.B.sigma = 0.1;
+		fit.pr.B.sigma = 10;
 		fit.pr.F.L = kron(eye(fit.c),secondDeriv(fit.m));
-		fit.pr.F.sigma = 0.1;
+		fit.pr.F.sigma = 10;
 	
 end
 
